@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulário de Avaliação</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function Formulario() {
+        const [enviado, setEnviado] = React.useState(false);
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+
+          const form = e.target;
+          const data = new FormData(form);
+
+          fetch("https://formsubmit.co/el/xuyiwe", {
+            method: "POST",
+            body: data,
+          })
+            .then(() => setEnviado(true))
+            .catch((error) => console.error("Erro ao enviar:", error));
+        };
+
+        if (enviado) {
+          return (
+            <div className="bg-white shadow-md rounded-2xl p-8 text-center max-w-md">
+              <h2 className="text-2xl font-semibold text-green-600 mb-4">✅ Obrigado!</h2>
+              <p className="text-gray-700">Sua resposta foi enviada com sucesso.</p>
+            </div>
+          );
+        }
+
+        return (
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white shadow-md rounded-2xl p-8 w-full max-w-md space-y-4"
+          >
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Avaliação de Treinamento – D Bauna
+            </h2>
+
+            <input
+              type="text"
+              name="nome"
+              placeholder="Seu nome"
+              required
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Seu e-mail"
+              required
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
+            <textarea
+              name="mensagem"
+              placeholder="Sua avaliação"
+              rows="4"
+              required
+              className="w-full border border-gray-300 rounded-lg p-2"
+            ></textarea>
+
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_subject" value="Nova Avaliação - D Bauna" />
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition"
+            >
+              Enviar
+            </button>
+          </form>
+        );
+      }
+
+      ReactDOM.render(<Formulario />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
